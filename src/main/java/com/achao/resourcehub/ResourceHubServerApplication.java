@@ -1,10 +1,10 @@
-package com.achao;
+package com.achao.resourcehub;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@MapperScan(basePackages = "org.example.dao")
+@MapperScan(basePackages = "com.achao.resourcehub.infrastructure.dao.*.mapper")
 @SpringBootApplication
 public class ResourceHubServerApplication {
     public static void main(String[] args) {

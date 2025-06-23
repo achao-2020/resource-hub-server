@@ -1,0 +1,23 @@
+package com.achao.resourcehub.controller.resource.vo;
+
+import cn.hutool.core.bean.BeanUtil;
+import com.achao.resourcehub.infrastructure.entity.Resource;
+import lombok.Data;
+
+import java.time.LocalDateTime;
+
+@Data
+public class ResourceQueryVo {
+    private Long id;
+    private String name;
+    private String type;
+    private String description;
+    private String shareLink;
+    private Boolean valid;
+    private LocalDateTime createTime;
+    private LocalDateTime updateTime;
+
+    public static ResourceQueryVo convertFrom(Resource resource) {
+        return BeanUtil.copyProperties(resource, ResourceQueryVo.class);
+    }
+}
