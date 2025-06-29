@@ -83,7 +83,7 @@ public class ResourceDaoImpl extends ServiceImpl<ResourceMapper, Resource> imple
         LambdaQueryWrapper<Resource> queryWrapper = Wrappers.<Resource>lambdaQuery();
         if (ObjectUtil.isNotNull(param)) {
             queryWrapper.eq(ObjectUtil.isNotNull(param.getId()), Resource::getId, param.getId())
-                    .eq(ObjectUtil.isNotEmpty(param.getName()), Resource::getName, param.getName())
+                    .likeRight(ObjectUtil.isNotEmpty(param.getName()), Resource::getName, param.getName())
                     .eq(ObjectUtil.isNotEmpty(param.getType()), Resource::getType, param.getType());
         }
         return queryWrapper;

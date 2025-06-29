@@ -53,7 +53,9 @@ public class ResourceServiceImpl implements ResourceService {
 
     @Override
     public ResourceQueryVo getResourceById(Long id) {
-        return ResourceQueryVo.convertFrom(resourceDao.getById(id));
+        ResourceQueryVo resourceQueryVo = ResourceQueryVo.convertFrom(resourceDao.getById(id));
+        this.fillTagInfo(resourceQueryVo);
+        return resourceQueryVo;
     }
 
     @Override
@@ -67,6 +69,14 @@ public class ResourceServiceImpl implements ResourceService {
 
     private void fillTagInfo(PageResult<ResourceQueryVo> pageResult) {
         List<ResourceQueryVo> records = pageResult.getRecords();
+        fillTagInfo(records);
+    }
+
+    private void fillTagInfo(ResourceQueryVo resourceQueryVo) {
+        fillTagInfo(List.of(resourceQueryVo));
+    }
+
+    private void fillTagInfo(List<ResourceQueryVo> records) {
         List<ResourceTag> resourceTags = resourceTagDao.queryByResourceIds(records.stream().map(ResourceQueryVo::getId).collect(Collectors.toList()));
         if (ObjectUtil.isNotEmpty(resourceTags)) {
             // 根据resourceId分组

@@ -25,9 +25,9 @@ public interface ResourceApi {
     @GetMapping("/{id}")
     ResResult<ResourceQueryVo> getById(@PathVariable Long id);
 
-    @GetMapping
-    ResResult<PageResult<ResourceQueryVo>> page(PageQuery<ResourceQueryParam> pageQuery);
+    @PostMapping("/page")
+    ResResult<PageResult<ResourceQueryVo>> page(@RequestBody PageQuery<ResourceQueryParam> pageQuery);
 
-    @GetMapping("/by-tag")
-    ResResult<PageResult<ResourceQueryVo>> pageByTag(PageQuery<ResourceTagQueryParam> pageQuery);
+    @PostMapping("/page-by-tag")
+    ResResult<PageResult<ResourceQueryVo>> pageByTag(@RequestBody PageQuery<ResourceTagQueryParam> pageQuery);
 }

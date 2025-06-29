@@ -1,6 +1,7 @@
 package com.achao.resourcehub.controller.resource.vo;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.ObjectUtil;
 import com.achao.resourcehub.infrastructure.entity.Resource;
 import lombok.Data;
 
@@ -21,5 +22,12 @@ public class ResourceQueryVo {
 
     public static ResourceQueryVo convertFrom(Resource resource) {
         return BeanUtil.copyProperties(resource, ResourceQueryVo.class);
+    }
+
+    public void interceptDesc() {
+        // 如果描述的字符数量超过100，则截取100个字符，剩余用 ... 表示
+        if (ObjectUtil.isNotEmpty(this.getDescription()) && this.getDescription().length() > 100) {
+            this.setDescription(this.getDescription().substring(0, 100) + "...");
+        }
     }
 }

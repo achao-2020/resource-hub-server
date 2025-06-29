@@ -1,5 +1,6 @@
 package com.achao.resourcehub.controller.resource;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.achao.resourcehub.api.ResourceApi;
 import com.achao.resourcehub.controller.resource.param.ResourceQueryParam;
 import com.achao.resourcehub.controller.resource.param.ResourceSaveParam;
@@ -11,7 +12,10 @@ import com.achao.resourcehub.infrastructure.model.res.PageResult;
 import com.achao.resourcehub.infrastructure.model.res.ResResult;
 import com.achao.resourcehub.service.resource.ResourceService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/resources")
@@ -42,7 +46,13 @@ public class ResourceController implements ResourceApi {
 
     @Override
     public ResResult<PageResult<ResourceQueryVo>> page(PageQuery<ResourceQueryParam> pageQuery) {
-        return ResResult.success(resourceService.page(pageQuery));
+        PageResult<ResourceQueryVo> page = resourceService.page(pageQuery);
+        if (ObjectUtil.isNotEmpty(page.getRecords())) {
+            for (ResourceQueryVo record : page.getRecords()) {
+                record.interceptDesc();
+            }
+        }
+        return ResResult.success(page);
     }
 
     @Override

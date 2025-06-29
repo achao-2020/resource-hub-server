@@ -15,7 +15,7 @@ public class PageResult<T> {
     public static <T> PageResult<T> convertFrom(Page page, Class<T> tClass) {
         PageResult<T> pageResult = new PageResult<>();
         pageResult.setRecords(BeanUtil.copyToList(page.getRecords(), tClass));
-        pageResult.setTotal(pageResult.getTotal());
+        pageResult.setTotal(page.getTotal());
         pageResult.setSize(page.getSize());
         return pageResult;
     }
