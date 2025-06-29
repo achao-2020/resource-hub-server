@@ -2,6 +2,7 @@ package com.achao.resourcehub.controller.resource;
 
 import com.achao.resourcehub.api.TagApi;
 import com.achao.resourcehub.controller.resource.vo.TagQueryVo;
+import com.achao.resourcehub.infrastructure.model.param.TagResourceParam;
 import com.achao.resourcehub.infrastructure.model.res.PageQuery;
 import com.achao.resourcehub.infrastructure.model.res.PageResult;
 import com.achao.resourcehub.infrastructure.model.res.ResResult;
@@ -10,6 +11,7 @@ import com.achao.resourcehub.infrastructure.model.param.TagSaveParam;
 import com.achao.resourcehub.infrastructure.model.param.TagUpdateParam;
 import com.achao.resourcehub.service.resource.TagService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -41,5 +43,10 @@ public class TagController implements TagApi {
     @Override
     public ResResult<PageResult<TagQueryVo>> page(PageQuery<TagPageQueryParam> pageQuery) {
         return ResResult.success(tagService.page(pageQuery));
+    }
+
+    @Override
+    public ResResult<Boolean> tagResource(@RequestBody TagResourceParam tagResourceParam) {
+        return ResResult.success(tagService.tagResource(tagResourceParam));
     }
 }

@@ -6,4 +6,8 @@ import java.util.List;
 
 public interface ResourceTagDao {
     List<ResourceTag> queryByTagId(Long tagId);
+
+    boolean saveBatch(List<Long> resourceIds, Long tagId);
+
+    List<ResourceTag> queryByResourceIds(List<Long> resourceIds);
 }

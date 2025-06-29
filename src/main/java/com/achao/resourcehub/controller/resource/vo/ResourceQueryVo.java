@@ -5,6 +5,7 @@ import com.achao.resourcehub.infrastructure.entity.Resource;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 public class ResourceQueryVo {
@@ -16,6 +17,7 @@ public class ResourceQueryVo {
     private Boolean valid;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
+    private List<TagQueryVo> tagVos;
 
     public static ResourceQueryVo convertFrom(Resource resource) {
         return BeanUtil.copyProperties(resource, ResourceQueryVo.class);

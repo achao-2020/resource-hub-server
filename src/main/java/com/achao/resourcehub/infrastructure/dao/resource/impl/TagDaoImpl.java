@@ -13,15 +13,17 @@ import com.achao.resourcehub.infrastructure.model.res.PageQuery;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-@AllArgsConstructor
+import java.util.List;
+
 @Repository
-public class TagDaoImpl implements TagDao {
+public class TagDaoImpl extends ServiceImpl<TagMapper, Tag> implements TagDao {
     @Resource
     private TagMapper tagMapper;
+
     @Override
     public Tag queryByTagName(String tagName) {
         return tagMapper.selectOne(Wrappers.<Tag>lambdaQuery().eq(Tag::getName, tagName));
@@ -64,6 +66,16 @@ public class TagDaoImpl implements TagDao {
         Page page = queryParam.convertToPage();
         LambdaQueryWrapper<Tag> wrapper = buildQueryWrapper(queryParam.getParam());
         return tagMapper.selectPage(page, wrapper);
+    }
+
+    @Override
+    public Tag queryById(Long tagId) {
+        return super.getById(tagId);
+    }
+
+    @Override
+    public List<Tag> queryByIds(List<Long> ids) {
+        return super.listByIds(ids);
     }
 
     private LambdaQueryWrapper<Tag> buildQueryWrapper(TagPageQueryParam param) {

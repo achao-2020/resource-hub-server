@@ -1,12 +1,13 @@
 package com.achao.resourcehub.api;
 
 import com.achao.resourcehub.controller.resource.vo.TagQueryVo;
+import com.achao.resourcehub.infrastructure.model.param.TagPageQueryParam;
+import com.achao.resourcehub.infrastructure.model.param.TagResourceParam;
+import com.achao.resourcehub.infrastructure.model.param.TagSaveParam;
+import com.achao.resourcehub.infrastructure.model.param.TagUpdateParam;
 import com.achao.resourcehub.infrastructure.model.res.PageQuery;
 import com.achao.resourcehub.infrastructure.model.res.PageResult;
 import com.achao.resourcehub.infrastructure.model.res.ResResult;
-import com.achao.resourcehub.infrastructure.model.param.TagPageQueryParam;
-import com.achao.resourcehub.infrastructure.model.param.TagSaveParam;
-import com.achao.resourcehub.infrastructure.model.param.TagUpdateParam;
 import org.springframework.web.bind.annotation.*;
 // Film
 @RequestMapping("/api/tags")
@@ -26,4 +27,10 @@ public interface TagApi {
 
     @GetMapping
     ResResult<PageResult<TagQueryVo>> page(@RequestBody PageQuery<TagPageQueryParam> pageQuery);
+
+    /**
+     * 对资源进行打标签
+     */
+    @PostMapping("/tag-resource")
+    ResResult<Boolean> tagResource(@RequestBody TagResourceParam tagResourceParam);
 }

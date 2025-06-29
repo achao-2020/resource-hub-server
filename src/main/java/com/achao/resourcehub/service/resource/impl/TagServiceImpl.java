@@ -1,23 +1,28 @@
 package com.achao.resourcehub.service.resource.impl;
 
 import com.achao.resourcehub.controller.resource.vo.TagQueryVo;
+import com.achao.resourcehub.infrastructure.dao.resource.ResourceTagDao;
 import com.achao.resourcehub.infrastructure.dao.resource.TagDao;
+import com.achao.resourcehub.infrastructure.entity.Tag;
 import com.achao.resourcehub.infrastructure.exception.AssertionUtil;
-import com.achao.resourcehub.infrastructure.model.res.PageQuery;
-import com.achao.resourcehub.infrastructure.model.res.PageResult;
 import com.achao.resourcehub.infrastructure.model.param.TagPageQueryParam;
+import com.achao.resourcehub.infrastructure.model.param.TagResourceParam;
 import com.achao.resourcehub.infrastructure.model.param.TagSaveParam;
 import com.achao.resourcehub.infrastructure.model.param.TagUpdateParam;
+import com.achao.resourcehub.infrastructure.model.res.PageQuery;
+import com.achao.resourcehub.infrastructure.model.res.PageResult;
 import com.achao.resourcehub.service.resource.TagService;
 import jakarta.annotation.Resource;
-import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
+@Slf4j
 public class TagServiceImpl implements TagService {
     @Resource
     private TagDao tagDao;
+    @Resource
+    private ResourceTagDao resourceTagDao;
 
     @Override
     public boolean saveTag(TagSaveParam saveParam) {
@@ -46,5 +51,15 @@ public class TagServiceImpl implements TagService {
     @Override
     public PageResult<TagQueryVo> page(PageQuery<TagPageQueryParam> queryParam) {
         return PageResult.convertFrom(tagDao.page(queryParam), TagQueryVo.class);
+    }
+
+    @Override
+    public Boolean tagResource(TagResourceParam tagResourceParam) {
+        AssertionUtil.assertNotNull(tagResourceParam, "参数不能为空");
+        tagResourceParam.validate();
+        Long tagId = tagResourceParam.getTagId();
+        Tag tag = tagDao.queryById(tagId);
+        AssertionUtil.assertNotNull(tag, "标签不存在");
+        return resourceTagDao.saveBatch(tagResourceParam.getResourceIds(), tagId);
     }
 }

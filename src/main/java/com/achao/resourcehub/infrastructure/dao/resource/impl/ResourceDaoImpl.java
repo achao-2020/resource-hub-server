@@ -56,8 +56,8 @@ public class ResourceDaoImpl extends ServiceImpl<ResourceMapper, Resource> imple
 
     @Override
     public Page<Resource> page(PageQuery<ResourceQueryParam> pageQuery) {
-        Page page = pageQuery.convertToPage();
-        return super.page(page,buildQueryWrapper(pageQuery.getParam()));
+        Page<Resource> page = pageQuery.convertToPage();
+        return super.page(page, buildQueryWrapper(pageQuery.getParam()));
     }
 
     @Override

@@ -7,6 +7,8 @@ import com.achao.resourcehub.infrastructure.model.param.TagUpdateParam;
 import com.achao.resourcehub.infrastructure.model.res.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
+import java.util.List;
+
 public interface TagDao {
     Tag queryByTagName(String tagName);
 
@@ -19,4 +21,8 @@ public interface TagDao {
     Tag getById(Long id);
 
     Page<Tag> page(PageQuery<TagPageQueryParam> queryParam);
+
+    Tag queryById(Long tagId);
+
+    List<Tag> queryByIds(List<Long> ids);
 }

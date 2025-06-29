@@ -8,4 +8,5 @@ public class ResourceQueryParam {
     private String name;
     private String type;
     private String description;
+    private Boolean needTag;
 }
