@@ -4,12 +4,12 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * alipan-阿里云盘
+ * 自定义标签
  */
 @Getter
 @Slf4j
 public enum TagTypeEnum {
-    ALIPAN("阿里云盘"),
+    CUSTOM("自定义"),
     ;
     private final String name;
 

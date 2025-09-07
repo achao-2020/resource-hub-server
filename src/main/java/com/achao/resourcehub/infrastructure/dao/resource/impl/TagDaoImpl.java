@@ -6,6 +6,7 @@ import com.achao.resourcehub.infrastructure.dao.resource.mapper.TagMapper;
 import com.achao.resourcehub.infrastructure.entity.Tag;
 import com.achao.resourcehub.infrastructure.exception.AssertionUtil;
 import com.achao.resourcehub.infrastructure.exception.BizException;
+import com.achao.resourcehub.infrastructure.model.enums.TagTypeEnum;
 import com.achao.resourcehub.infrastructure.model.param.TagPageQueryParam;
 import com.achao.resourcehub.infrastructure.model.param.TagSaveParam;
 import com.achao.resourcehub.infrastructure.model.param.TagUpdateParam;
@@ -17,6 +18,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collections;
 import java.util.List;
 
 @Repository
@@ -78,6 +80,27 @@ public class TagDaoImpl extends ServiceImpl<TagMapper, Tag> implements TagDao {
         return super.listByIds(ids);
     }
 
+    @Override
+    public List<Tag> saveQueryByTagNames(List<String> tagNames) {
+        if (ObjectUtil.isEmpty(tagNames)) {
+            return Collections.emptyList();
+        }
+        List<Tag> existTags = this.list(Wrappers.<Tag>lambdaQuery().in(Tag::getName, tagNames));
+        // 不存在的新增
+        List<String> newTagNames = tagNames.stream().filter(tagName -> existTags.stream().noneMatch(tag -> tag.getName().equals(tagName))).toList();
+        if (ObjectUtil.isNotEmpty(newTagNames)) {
+            List<Tag> newTags = newTagNames.stream().map(n -> {
+                Tag tag = new Tag();
+                tag.setName(n);
+                tag.setType(TagTypeEnum.CUSTOM.name());
+                return tag;
+            }).toList();
+            this.saveBatch(newTags);
+            existTags.addAll(newTags);
+        }
+        return existTags;
+    }
+
     private LambdaQueryWrapper<Tag> buildQueryWrapper(TagPageQueryParam param) {
         LambdaQueryWrapper<Tag> wrapper = Wrappers.lambdaQuery();
         if (ObjectUtil.isNotNull(param)) {
@@ -87,4 +110,6 @@ public class TagDaoImpl extends ServiceImpl<TagMapper, Tag> implements TagDao {
         }
         return wrapper;
     }
+
+
 }

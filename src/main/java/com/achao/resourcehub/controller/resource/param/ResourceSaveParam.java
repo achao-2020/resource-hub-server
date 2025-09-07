@@ -5,12 +5,15 @@ import com.achao.resourcehub.infrastructure.exception.AssertionUtil;
 import com.achao.resourcehub.infrastructure.model.enums.ResourceTypeEnum;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class ResourceSaveParam {
     private String name;
     private String type;
     private String description;
     private String shareLink;
+    private List<String> tagNames;
 
     public static Resource toResource(ResourceSaveParam saveParam) {
         Resource resource = new Resource();
@@ -28,5 +31,6 @@ public class ResourceSaveParam {
         ResourceTypeEnum.isExist(type);
         AssertionUtil.assertNotBlank(shareLink, "资源分享链接不能为空");
         AssertionUtil.assertNotBlank(description, "资源描述不能为空");
+        AssertionUtil.assertNotEmpty(tagNames, "资源标签不能为空");
     }
 }

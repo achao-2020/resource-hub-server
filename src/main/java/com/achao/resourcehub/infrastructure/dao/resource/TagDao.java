@@ -25,4 +25,6 @@ public interface TagDao {
     Tag queryById(Long tagId);
 
     List<Tag> queryByIds(List<Long> ids);
+
+    List<Tag> saveQueryByTagNames(List<String> tagNames);
 }

@@ -33,9 +33,10 @@ public class ResourceDaoImpl extends ServiceImpl<ResourceMapper, Resource> imple
     private final ResourceTagDao resourceTagDao;
 
     @Override
-    public boolean save(ResourceSaveParam saveParam) {
+    public Resource save(ResourceSaveParam saveParam) {
         Resource resource = ResourceSaveParam.toResource(saveParam);
-        return save(resource);
+        boolean save = save(resource);
+        return save ? resource : null;
     }
 
     @Override

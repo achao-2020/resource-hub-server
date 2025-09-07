@@ -1,10 +1,7 @@
 package com.achao.resourcehub.service.resource.impl;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.achao.resourcehub.controller.resource.param.ResourceQueryParam;
-import com.achao.resourcehub.controller.resource.param.ResourceSaveParam;
-import com.achao.resourcehub.controller.resource.param.ResourceTagQueryParam;
-import com.achao.resourcehub.controller.resource.param.ResourceUpdateParam;
+import com.achao.resourcehub.controller.resource.param.*;
 import com.achao.resourcehub.controller.resource.vo.ResourceQueryVo;
 import com.achao.resourcehub.controller.resource.vo.TagQueryVo;
 import com.achao.resourcehub.infrastructure.dao.resource.ResourceDao;
@@ -19,6 +16,7 @@ import com.achao.resourcehub.service.resource.ResourceService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -34,11 +32,24 @@ public class ResourceServiceImpl implements ResourceService {
     @Resource
     private TagDao tagDao;
 
+
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean saveResource(ResourceSaveParam saveParam) {
         AssertionUtil.assertNotNull(saveParam, "参数不能为空");
         saveParam.validate();
-        return resourceDao.save(saveParam);
+        List<Tag> tagList = tagDao.saveQueryByTagNames(saveParam.getTagNames());
+        com.achao.resourcehub.infrastructure.entity.Resource saveResource = resourceDao.save(saveParam);
+        if (ObjectUtil.isEmpty(saveResource)) {
+            return false;
+        }
+        // 维护标签和资源的关系
+        List<Long> tagIds = tagList.stream().map(Tag::getId).toList();
+        ResourceTagSaveParam resourceTagSaveParam = new ResourceTagSaveParam();
+        resourceTagSaveParam.setResourceId(saveResource.getId());
+        resourceTagSaveParam.setTagIds(tagIds);
+        resourceTagDao.save(resourceTagSaveParam);
+        return true;
     }
 
     @Override

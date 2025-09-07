@@ -9,7 +9,7 @@ import com.achao.resourcehub.infrastructure.model.res.PageQuery;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 public interface ResourceDao {
-    boolean save(ResourceSaveParam saveParam);
+    Resource save(ResourceSaveParam saveParam);
 
     boolean update(ResourceUpdateParam updateParam);
 
