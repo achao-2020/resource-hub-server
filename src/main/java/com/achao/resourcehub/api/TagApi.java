@@ -25,7 +25,7 @@ public interface TagApi {
     @GetMapping("/{id}")
     ResResult<TagQueryVo> getById(@PathVariable Long id);
 
-    @GetMapping
+    @PostMapping("/page")
     ResResult<PageResult<TagQueryVo>> page(@RequestBody PageQuery<TagPageQueryParam> pageQuery);
 
     /**
